@@ -1,6 +1,7 @@
 import discord
 import youtube_dl
 import os
+import functions
 from discord.ext import commands
 from discord.utils import get
 
@@ -55,6 +56,13 @@ async def leave(ctx):
     else: 
         voice = await channel.connect()
         await ctx.send(f'Bot disconnected from the channel: {channel}')
+
+
+@bot.command()
+async def roll(ctx, arg):
+    author = ctx.message.author
+    result = roll(arg)
+    await ctx.send(f'{result} {author.mention}')
 
 
 token = open('token.txt', 'r').readline()
