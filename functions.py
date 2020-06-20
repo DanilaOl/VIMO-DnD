@@ -4,8 +4,9 @@ ALLOWED_EDGES = (4, 6, 8, 10, 12, 20)
 
 
 def roll(dice):
-    # This function generates random numbers in one of allowed ranges.
-    # It takes string in xdy format, where x is quantity of rolls and y is dice edges amount
+    # This function generates random numbers in one of the allowed ranges.
+    # It takes string in xdy format, where x is the quantity of rolls and y is the dice edges amount
+    dice = dice.translate(str.maketrans({'x': 'd', 's': 'd', 'e': 'd', 'r': 'd', 'f': 'd', 'c': 'd'}))
     rolls_qnt, edges = dice.split('d')
     rolls_qnt, edges = int(rolls_qnt), int(edges)
     if edges not in ALLOWED_EDGES:
@@ -47,14 +48,34 @@ def rand_params():
 
 
 def advantage_roll(dice):
-    # Makes 2 rolls and choosing greatest
-    rolls = [roll(dice), roll(dice)]
-    output = " или ".join(rolls) + f". Итого {max(rolls)}"
+    # Makes 2 rolls and choosing the greatest
+    rolls = [int(roll(dice)), int(roll(dice))]
+    output = " или ".join(str(x) for x in rolls) + f". Итого {max(rolls)}"
     return output
 
 
 def disadvantage_roll(dice):
-    # Makes 2 rolls and choosing lowest
-    rolls = [roll(dice), roll(dice)]
-    output = " или ".join(rolls) + f". Итого {min(rolls)}"
+    # Makes 2 rolls and choosing the lowest
+    rolls = [int(roll(dice)), int(roll(dice))]
+    output = " или ".join(str(x) for x in rolls) + f". Итого {min(rolls)}"
     return output
+
+
+def flip_coin():
+    # Simulates coin flipping
+    return random.randint(0, 1)
+
+
+def death_roll():
+    successes, failures = 0, 0
+
+    while successes < 3 and failures < 3:
+        if flip_coin():
+            successes += 1
+        else:
+            failures += 1
+
+        if successes == 3:
+            return "Congratulations, you have survived"
+        elif failures == 3:
+            return "Sorry, but your character is dead"
