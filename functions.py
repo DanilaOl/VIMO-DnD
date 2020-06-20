@@ -30,7 +30,7 @@ def roll(dice):
 
 def show_score(dice):
     # Prettifying output of roll function
-    if int(dice.split('d')[0]) == 1:
+    if int(dice[0]) == 1:
         return roll(dice)
     else:
         all_scores, final_score = roll(dice)
@@ -63,7 +63,8 @@ def disadvantage_roll(dice):
 
 def flip_coin():
     # Simulates coin flipping
-    return random.randint(0, 1)
+    coin = ('Orel', 'Reshka')
+    return random.choice(coin)
 
 
 def death_roll():
