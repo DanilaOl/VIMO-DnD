@@ -65,5 +65,26 @@ async def roll(ctx, arg):
     await ctx.send(f'{result} {author.mention}')
 
 
+@bot.command()
+async def advRoll(ctx, arg):
+    author = ctx.message.author
+    result = f.advantage_roll(arg)
+    await ctx.send(f'{result} {author.mention}')
+
+
+@bot.command()
+async def dadvRoll(ctx, arg):
+    author = ctx.message.author
+    result = f.disadvantage_roll(arg)
+    await ctx.send(f'{result} {author.mention}')
+
+
+@bot.command()
+async def randParams(ctx):
+    author = ctx.message.author
+    result = f.rand_params()
+    await ctx.send(f'{result} {author.mention}')
+
+
 token = open('token.txt', 'r').readline()
 bot.run(token)
