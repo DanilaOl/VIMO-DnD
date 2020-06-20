@@ -80,6 +80,20 @@ async def dadvRoll(ctx, arg):
 
 
 @bot.command()
+async def deathRoll(ctx):
+    author = ctx.message.author
+    result = f.death_roll()
+    await ctx.send(f'{result} {author.mention}')
+
+
+@bot.command()
+async def flipCoin(ctx):
+    author = ctx.message.author
+    result = f.flip_coin()
+    await ctx.send(f'{result} {author.mention}')
+
+
+@bot.command()
 async def randParams(ctx):
     author = ctx.message.author
     result = f.rand_params()
