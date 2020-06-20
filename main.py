@@ -1,7 +1,7 @@
 import discord
 import youtube_dl
 import os
-import functions
+import functions as f
 from discord.ext import commands
 from discord.utils import get
 
@@ -61,7 +61,7 @@ async def leave(ctx):
 @bot.command()
 async def roll(ctx, arg):
     author = ctx.message.author
-    result = roll(arg)
+    result = f.show_score(arg)
     await ctx.send(f'{result} {author.mention}')
 
 
