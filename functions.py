@@ -22,5 +22,18 @@ def roll(dice):
             rolls_qnt -= 1
 
         final_score = sum(all_scores)
-        final_str = ' + '.join(str(i) for i in all_scores) + ' = ' + str(final_score)
-        return final_str
+        return all_scores, final_score
+
+
+def show_score(dice):
+    all_scores, final_score = roll(dice)
+    final_str = ' + '.join(str(i) for i in all_scores) + ' = ' + str(final_score)
+    return final_str
+
+
+def rand_params():
+    params = []
+    for i in range(6):
+        scores = sorted(roll("4d6")[0])[1:]
+        params.append(sum(scores))
+    return params
