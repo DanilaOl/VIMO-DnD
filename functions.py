@@ -80,3 +80,4 @@ def death_roll():
             return "Congratulations, you have survived"
         elif failures == 3:
             return "Sorry, but your character is dead"
+            
