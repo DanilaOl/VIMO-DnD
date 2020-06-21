@@ -2,6 +2,7 @@ import os
 import discord
 import functions as f
 from time import sleep
+from random import randint
 from discord.utils import get
 from discord.ext import commands
 
@@ -71,23 +72,25 @@ async def unban(ctx, *, member):
         await ctx.send(f'User unbanned {user.mention}')
 
         return 
-
+    
 
 # Plays thematic music
 @bot.command(pass_context=True)
 async def play(ctx, music_theme):
     channel = ctx.message.author.voice.channel
     voice = get(bot.voice_clients, guild = ctx.guild)
-    path = music_theme
 
     if voice and voice.is_connected():
         await voice.move_to(channel)
     else:
         voice = await channel.connect()
 
-    if path == 'battle':
-        os.chdir(f'music/{path}')
-        voice.play(discord.FFmpegPCMAudio('Lead the charge.mp3'))
+    if music_theme == 'battle':
+        if os.getcwd() != 'music/battle':
+            os.chdir(f'music/{music_theme}')
+
+        track_number = randint(1, f.sum_files())
+        voice.play(discord.FFmpegPCMAudio(f'{track_number}.mp3'))
         voice.source = discord.PCMVolumeTransformer(voice.source)
         voice.source.volume = 0.07
 
