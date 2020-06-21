@@ -73,19 +73,19 @@ async def unban(ctx, *, member):
         return 
 
 
-# Plays thematic music
-@bot.command(pass_context=True)
-async def play(ctx):
-    channel = ctx.message.author.voice.channel
-    voice = get(bot.voice_clients, guild = ctx.guild)
+# # Plays thematic music
+# @bot.command(pass_context=True)
+# async def play(ctx):
+#     channel = ctx.message.author.voice.channel
+#     voice = get(bot.voice_clients, guild = ctx.guild)
 
-    if voice and voice.is_connected():
-        await voice.move_to(channel)
-    else:
-        voice = await channel.connect()
+#     if voice and voice.is_connected():
+#         await voice.move_to(channel)
+#     else:
+#         voice = await channel.connect()
 
-    if music_theme == 'Battle':
-        voice.play(discord.FFmpegPCMAudio(''))
+#     if music_theme == 'Battle':
+#         voice.play(discord.FFmpegPCMAudio(''))
 
 
 # Leaves voice chat
