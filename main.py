@@ -46,21 +46,22 @@ async def clear(ctx, amount = 100):
 #         voice = await channel.connect()
 
 
-# @bot.command()
-# async def leave(ctx):
-#     channel = ctx.message.author.voice.channel
-#     voice = get(bot.voice_clients, guild = ctx.guild)
+@bot.command()
+async def leave(ctx):
+    channel = ctx.message.author.voice.channel
+    voice = get(bot.voice_clients, guild = ctx.guild)
 
-#     if voice and voice.is_connected():
-#         await voice.disconnect()
-#     else:
-#         voice = await channel.connect()
+    if voice and voice.is_connected():
+        await voice.disconnect()
+    else:
+        voice = await channel.connect()
 
 
 @bot.command(pass_context=True)
 async def YoYoPiraka(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(bot.voice_clients, guild = ctx.guild)
+    
     voice = await channel.connect()
     voice.play(discord.FFmpegPCMAudio('Piraka Rap.mp3'))
         
