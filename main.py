@@ -73,24 +73,28 @@ async def unban(ctx, *, member):
         return 
 
 
-# # Plays thematic music
-# @bot.command(pass_context=True)
-# async def play(ctx):
-#     channel = ctx.message.author.voice.channel
-#     voice = get(bot.voice_clients, guild = ctx.guild)
+# Plays thematic music
+@bot.command(pass_context=True)
+async def play(ctx, music_theme):
+    channel = ctx.message.author.voice.channel
+    voice = get(bot.voice_clients, guild = ctx.guild)
+    path = music_theme
 
-#     if voice and voice.is_connected():
-#         await voice.move_to(channel)
-#     else:
-#         voice = await channel.connect()
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
 
-#     if music_theme == 'Battle':
-#         voice.play(discord.FFmpegPCMAudio(''))
+    if path == 'battle':
+        os.chdir(f'music/{path}')
+        voice.play(discord.FFmpegPCMAudio('Lead the charge.mp3'))
+        voice.source = discord.PCMVolumeTransformer(voice.source)
+        voice.source.volume = 0.07
 
 
 # Leaves voice chat
-@bot.command()
-async def leave(ctx, music_theme):
+@bot.command(pass_context=True)
+async def leave(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(bot.voice_clients, guild=ctx.guild)
 
@@ -111,7 +115,7 @@ async def YoYoPiraka(ctx):
 
 
 # Rolls dices in xdy format
-@bot.command()
+@bot.command(pass_context=True)
 async def roll(ctx, arg):
     author = ctx.message.author
     result = f.show_score(arg)
@@ -119,7 +123,7 @@ async def roll(ctx, arg):
 
 
 # Rolls dices with advantage
-@bot.command()
+@bot.command(pass_context=True)
 async def advRoll(ctx, arg):
     author = ctx.message.author
     result = f.advantage_roll(arg)
@@ -127,7 +131,7 @@ async def advRoll(ctx, arg):
 
 
 # Rolls dices with disadvantage
-@bot.command()
+@bot.command(pass_context=True)
 async def dadvRoll(ctx, arg):
     author = ctx.message.author
     result = f.disadvantage_roll(arg)
@@ -135,7 +139,7 @@ async def dadvRoll(ctx, arg):
 
 
 # Rolls dices to make a death check
-@bot.command()
+@bot.command(pass_context=True)
 async def deathRoll(ctx):
     author = ctx.message.author
     successes, failures = 0, 0
@@ -161,7 +165,7 @@ async def deathRoll(ctx):
 
 
 # Flips coin 
-@bot.command()
+@bot.command(pass_context=True)
 async def flipCoin(ctx):
     author = ctx.message.author
     result = f.flip_coin()
@@ -169,7 +173,7 @@ async def flipCoin(ctx):
 
 
 #Generates random parameters for character
-@bot.command()
+@bot.command(pass_context=True)
 async def randParams(ctx):
     author = ctx.message.author
     result = f.rand_params()
