@@ -11,6 +11,7 @@ bot = commands.Bot(command_prefix = PREFIX)
 bot.remove_command('help')
 
 
+#Checking for connection and setting up bot status
 @bot.event
 async def on_ready():
     print('Bot is ready to rock!')
@@ -19,8 +20,8 @@ async def on_ready():
                               activity = discord.Game('D&D 5e | -help'))
 
 
+#List of bot's commands
 @bot.command(pass_context = True)
-@commands.has_permissions(administrator = True)
 async def help(ctx):
     emb = discord.Embed(title = 'Commands list')
     
@@ -29,23 +30,51 @@ async def help(ctx):
     await ctx.send(embed = emb)
 
 
+#Clears last 100 messages
 @bot.command(pass_content = True)
+@commands.has_permissions(administrator = True)
 async def clear(ctx, amount = 100):
     await ctx.channel.purge(limit = amount)  
 
 
-# @bot.command()
-# async def join(ctx):
-#     global voice 
-#     channel = ctx.message.author.voice.channel
-#     voice = get(bot.voice_clients, guild = ctx.guild)
-
-#     if voice and voice.is_connected():
-#         await voice.move_to(channel)
-#     else:
-#         voice = await channel.connect()
+#Kicks user
+@bot.command(pass_content = True)
+@commands.has_permissions(administrator = True)
+async def kick(ctx, member: discord.Member, *, reason = None):
+    await ctx.channel.purge(limit = 1)
+    
+    await member.kick(reason = reason)
+    await ctx.send(f'User kicked {member.mention}')
 
 
+#Bans user
+@bot.command(pass_content = True)
+@commands.has_permissions(administrator = True)
+async def ban(ctx, member: discord.Member, *, reason = None):
+    await ctx.channel.purge(limit = 1)
+    
+    await member.ban(reason = reason)
+    await ctx.send(f'User banned {member.mention}')
+
+
+#Unbans user
+@bot.command(pass_context = True)
+@commands.has_permissions(administrator = True)
+async def unban(ctx, *, member):
+    await ctx.channel.purge(limit = 1)
+
+    banned_users = await ctx.guild.bans()
+
+    for ban_entry in banned_users:
+        user = ban_entry.user
+
+        await ctx.guild.unban(user)
+        await ctx.send(f'User unbanned {user.mention}')
+
+        return 
+
+
+#Leaves voice-chat
 @bot.command()
 async def leave(ctx):
     channel = ctx.message.author.voice.channel
@@ -57,6 +86,7 @@ async def leave(ctx):
         voice = await channel.connect()
 
 
+#The most awesome easter-egg in the world XD
 @bot.command(pass_context=True)
 async def YoYoPiraka(ctx):
     channel = ctx.message.author.voice.channel
@@ -66,48 +96,7 @@ async def YoYoPiraka(ctx):
     voice.play(discord.FFmpegPCMAudio('Piraka Rap.mp3'))
         
 
-# @bot.command()
-# async def play(ctx, url: str):
-#     song_there = os.path.isfile('song.mp3')
-
-#     try:
-#         if song_there:
-#             os.remove('song.mp3')
-#             print('[log] Olf dile deleted')
-#     except PermissionError:
-#         print('[log] Failure to download file')
-    
-#     await ctx.send('Please, standby')
-
-#     voice = get(bot.voice_clients, guild = ctx.guild)
-
-#     ydl_opts = {
-#         'format': 'bestaudio/best',
-#         'postprocessors': [{
-#             'key': 'FFmpegExtractAudio',
-#             'preferredcodec': 'mp3', 
-#             'preferredquality': '192'
-#         }],
-#     }
-
-#     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-#         print('[log] Downloading music...')
-#         ydl.download([url])
-
-#     for file in os.listdir('./'):
-#         if file.endswith('.mp3'):
-#             name = file
-#             print('[log] Renaming file: {file}')
-#             os.rename(file, 'song.mp3')
-
-#     voice.play(discord.FFmpegPCMAudio('song.mp3'), after = lambda e: print(f'[log] {name}, music ended'))
-#     voice.source = discord.PCMVolumeTransformer(voice.source)
-#     voice.source.volume = 0.07
-
-#     song_name = name.rsplit('-', 2)
-#     await ctx.send(f'Now playing: {song_name[0]}')
-
-
+#Rolls dices in xdy format
 @bot.command()
 async def roll(ctx, arg):
     author = ctx.message.author
@@ -115,6 +104,7 @@ async def roll(ctx, arg):
     await ctx.send(f'{result} {author.mention}')
 
 
+#Rolls dices with advantage
 @bot.command()
 async def advRoll(ctx, arg):
     author = ctx.message.author
@@ -122,6 +112,7 @@ async def advRoll(ctx, arg):
     await ctx.send(f'{result} {author.mention}')
 
 
+#Rolls dices with disadvantage
 @bot.command()
 async def dadvRoll(ctx, arg):
     author = ctx.message.author
@@ -129,6 +120,7 @@ async def dadvRoll(ctx, arg):
     await ctx.send(f'{result} {author.mention}')
 
 
+#Rolls dices to make a death check
 @bot.command()
 async def deathRoll(ctx):
     author = ctx.message.author
@@ -136,6 +128,7 @@ async def deathRoll(ctx):
     await ctx.send(f'{result} {author.mention}')
 
 
+#Flips coin 
 @bot.command()
 async def flipCoin(ctx):
     author = ctx.message.author
@@ -143,6 +136,7 @@ async def flipCoin(ctx):
     await ctx.send(f'{result} {author.mention}')
 
 
+#Generates random parametres for charachter
 @bot.command()
 async def randParams(ctx):
     author = ctx.message.author
