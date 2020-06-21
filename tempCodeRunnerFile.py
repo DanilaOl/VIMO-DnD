@@ -1,0 +1,1 @@
+    # voice = get(bot.voice_clients, guild=ctx.guild)

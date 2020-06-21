@@ -1,7 +1,5 @@
 import os
 import discord
-import asyncio
-import youtube_dl
 import functions as f
 from time import sleep
 from discord.utils import get
@@ -75,9 +73,24 @@ async def unban(ctx, *, member):
         return 
 
 
-# Leaves voice-chat
+# Plays thematic music
+@bot.command(pass_context=True)
+async def play(ctx):
+    channel = ctx.message.author.voice.channel
+    voice = get(bot.voice_clients, guild = ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+
+    if music_theme == 'Battle':
+        voice.play(discord.FFmpegPCMAudio(''))
+
+
+# Leaves voice chat
 @bot.command()
-async def leave(ctx):
+async def leave(ctx, music_theme):
     channel = ctx.message.author.voice.channel
     voice = get(bot.voice_clients, guild=ctx.guild)
 
@@ -95,7 +108,7 @@ async def YoYoPiraka(ctx):
     
     voice = await channel.connect()
     voice.play(discord.FFmpegPCMAudio('Piraka Rap.mp3'))
-        
+
 
 # Rolls dices in xdy format
 @bot.command()
