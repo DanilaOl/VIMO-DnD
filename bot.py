@@ -1,5 +1,6 @@
 import os
 import discord
+import config as c
 import functions as f
 from time import sleep
 from random import randint
@@ -164,7 +165,6 @@ async def deathRoll(ctx):
         await ctx.send(f'Поздравляю, ваш персонаж выжил {author.mention}')
     elif failures == 3:
         await ctx.send(f'К сожалению, ваш персонаж погиб {author.mention}')
-#       TODO: delete character from file
 
 
 # Flips coin 
@@ -182,6 +182,4 @@ async def randParams(ctx):
     result = f.rand_params()
     await ctx.send(f'{result} {author.mention}')
 
-
-token = open('token.txt', 'r').readline()
-bot.run(token)
+bot.run(c.TOKEN)
