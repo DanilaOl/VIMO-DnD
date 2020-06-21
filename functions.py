@@ -5,9 +5,11 @@ ALLOWED_EDGES = (4, 6, 8, 10, 12, 20)
 
 def roll(dice):
     # This function generates random numbers in one of the allowed ranges.
-    # It takes string in xdy format, where x is the quantity of rolls and y is the dice edges amount
+    # It takes string in xdy or dy format, where x is the quantity of rolls and y is the dice edges amount
     dice = dice.translate(str.maketrans({'x': 'd', 's': 'd', 'e': 'd', 'r': 'd', 'f': 'd', 'c': 'd'}))
     rolls_qnt, edges = dice.split('d')
+    if rolls_qnt == '':
+        rolls_qnt = '1'
     rolls_qnt, edges = int(rolls_qnt), int(edges)
     if edges not in ALLOWED_EDGES:
         return 'Ты инвалид, нет такого кубика'
@@ -30,7 +32,7 @@ def roll(dice):
 
 def show_score(dice):
     # Prettifying output of roll function
-    if int(dice[0]) == 1:
+    if dice[0] == '1' or 'd':
         return roll(dice)
     else:
         all_scores, final_score = roll(dice)
@@ -63,21 +65,5 @@ def disadvantage_roll(dice):
 
 def flip_coin():
     # Simulates coin flipping
-    coin = ('Orel', 'Reshka')
+    coin = ('Орёл', 'Решка')
     return random.choice(coin)
-
-
-def death_roll():
-    successes, failures = 0, 0
-
-    while successes < 3 and failures < 3:
-        if flip_coin():
-            successes += 1
-        else:
-            failures += 1
-
-        if successes == 3:
-            return "Congratulations, you have survived"
-        elif failures == 3:
-            return "Sorry, but your character is dead"
-            
