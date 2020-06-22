@@ -1,11 +1,11 @@
 import os
 import discord
-import asyncio
-import youtube_dl
 import functions as f
+import characters as ch
 from time import sleep
 from discord.utils import get
 from discord.ext import commands
+from discord import client
 
 PREFIX = '-'
 bot = commands.Bot(command_prefix=PREFIX)
@@ -144,7 +144,6 @@ async def deathRoll(ctx):
         await ctx.send(f'Поздравляю, ваш персонаж выжил {author.mention}')
     elif failures == 3:
         await ctx.send(f'К сожалению, ваш персонаж погиб {author.mention}')
-#       TODO: delete character from file
 
 
 # Flips coin 
@@ -155,12 +154,34 @@ async def flipCoin(ctx):
     await ctx.send(f'{result} {author.mention}')
 
 
-#Generates random parameters for character
+# Generates random parameters for character
 @bot.command()
 async def randParams(ctx):
     author = ctx.message.author
     result = f.rand_params()
-    await ctx.send(f'{result} {author.mention}')
+    await author.send(f'{result}')
+
+
+# Creates character using your stats
+@bot.command()
+async def createCharacter(ctx, *args):
+    author = ctx.message.author
+    await ctx.send(f"{args}")
+    if len(args) != 9:
+        await ctx.send(f'Передано недостаточно аргументов\n'
+                       f'Синтакс команды -createCharacter\n'
+                       f'ИмяПерсонажа  Раса Класс Сила Ловкость Телосложение Интеллект Мудрость Харизма\n'
+                       f'{author.mention}')
+
+    elif (type(args[0]) is not str) or (type(args[1]) is not str) or (type(args[2]) is not str):
+        await ctx.send(f'Неправильный порядок аргументов \n'
+                       f'Синтакс команды -createCharacter\n'
+                       f'ИмяПерсонажа  Раса Класс Сила Ловкость Телосложение Интеллект Мудрость Харизма\n'
+                       f'{author.mention}')
+
+    else:
+        output = ch.create_character(*args)
+        await author.send(output)
 
 
 token = open('token.txt', 'r').readline()

@@ -12,7 +12,7 @@ def roll(dice):
         rolls_qnt = '1'
     rolls_qnt, edges = int(rolls_qnt), int(edges)
     if edges not in ALLOWED_EDGES:
-        return 'Ты инвалид, нет такого кубика'
+        return 'Нет кубика с такими гранями'
 
     elif rolls_qnt == 1:
         score = random.randint(1, edges)
@@ -67,3 +67,4 @@ def flip_coin():
     # Simulates coin flipping
     coin = ('Орёл', 'Решка')
     return random.choice(coin)
+
