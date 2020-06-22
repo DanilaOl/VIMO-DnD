@@ -1,4 +1,5 @@
 import os
+import json
 import discord
 import config as c
 import functions as f
@@ -7,6 +8,7 @@ from time import sleep
 from random import randint
 from discord.utils import get
 from discord.ext import commands
+from exceptions import WrongCharacterRace, WrongCharacterClass
 
 bot = commands.Bot(command_prefix=c.PREFIX)
 bot.remove_command('help')
@@ -147,26 +149,16 @@ async def leave(ctx):
 @bot.command(pass_context=True)
 async def play(ctx, music_theme):
     voice = get(bot.voice_clients, guild=ctx.guild)
-    os.chdir(f'music/{music_theme}')
+    
+    os.chdir(f"C:\Users\89154\Desktop\VIMO-DnD\VIMO-DnD\music\{music_theme}")
+    track_number = randint(1, f.sum_files())
 
-    if music_theme == 'battle':
-        voice.play(discord.FFmpegPCMAudio('1.mp3'))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.25
-    elif music_theme == 'civil':
-        voice.play(discord.FFmpegPCMAudio('1.mp3'))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.25
-    elif music_theme == 'journey':
-        voice.play(discord.FFmpegPCMAudio('1.mp3'))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.25
-    elif music_theme == 'mystic':
-        voice.play(discord.FFmpegPCMAudio('1.mp3'))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.25
+    voice.play(discord.FFmpegPCMAudio(f'{track_number}.mp3'))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 0.25
 
 
+# Pauses music
 @bot.command(pass_context=True, aliases=['pa', 'pau'])
 async def pause(ctx):
     voice = get(bot.voice_clients, guild=ctx.guild)
@@ -175,6 +167,7 @@ async def pause(ctx):
         voice.pause()
 
 
+# Resumes music
 @bot.command(pass_context=True, aliases=['r', 'res'])
 async def resume(ctx):
     voice = get(bot.voice_clients, guild=ctx.guild)
@@ -183,6 +176,7 @@ async def resume(ctx):
         voice.resume()
 
 
+# Stops music
 @bot.command(pass_context=True, aliases=['s', 'sto'])
 async def stop(ctx):
     voice = get(bot.voice_clients, guild=ctx.guild)
@@ -190,7 +184,6 @@ async def stop(ctx):
     if voice and voice.is_playing():
         voice.stop()
 
-    
 
 # Rolls dices in xdy format
 @bot.command(pass_context=True)

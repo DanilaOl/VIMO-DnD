@@ -80,6 +80,3 @@ def calc_modificators(strength, dexterity, constitution, intelligence, wisdom, c
 def calc_hit_points(ch_class, cons_mod):
     hit_points = int(class_features[ch_class]['hit_dice'][2:]) + cons_mod
     return hit_points
-
-
-print(create_character('Дазваир', 'Дварф', 'Жрец', 14, 8, 13, 10, 16, 11))
