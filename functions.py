@@ -1,3 +1,4 @@
+import os
 import random
 
 ALLOWED_EDGES = (4, 6, 8, 10, 12, 20)
