@@ -1,3 +1,4 @@
+import os
 import random
 
 ALLOWED_EDGES = (4, 6, 8, 10, 12, 20)
@@ -67,3 +68,9 @@ def flip_coin():
     # Simulates coin flipping
     coin = ('Орёл', 'Решка')
     return random.choice(coin)
+
+
+def sum_files():
+    # Counts the number of files in working directory
+    file_count = next(os.walk(os.getcwd()))[2]
+    return len(file_count)

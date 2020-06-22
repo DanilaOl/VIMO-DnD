@@ -7,12 +7,11 @@ from random import randint
 from discord.utils import get
 from discord.ext import commands
 
-PREFIX = '-'
-bot = commands.Bot(command_prefix=PREFIX)
+bot = commands.Bot(command_prefix=c.PREFIX)
 bot.remove_command('help')
 
 
-# Checking for connection and setting up bot status
+# Checking for connection and setting up a status
 @bot.event
 async def on_ready():
     print('Bot is ready to rock!')
@@ -21,20 +20,92 @@ async def on_ready():
                               activity=discord.Game('D&D 5e | -help'))
 
 
+# Adds a role to the user
+@bot.event
+async def on_raw_reaction_add(ctx):
+    if ctx.message_id == c.POST_ID:
+        channel = bot.get_channel(ctx.channel_id) 
+        message = await channel.fetch_message(ctx.message_id) 
+        member = get(message.guild.members, id=ctx.user_id) 
+
+        try:
+            emoji = str(ctx.emoji) 
+            role = get(message.guild.roles, id=c.ROLES[emoji]) 
+        
+            if(len([i for i in member.roles if i.id not in c.EXROLES]) <= c.MAX_ROLES_PER_USER):
+                await member.add_roles(role)
+                print('[SUCCESS] User {0.display_name} has been granted with role {1.name}'.format(member, role))
+            else:
+                await message.remove_reaction(ctx.emoji, member)
+                print('[ERROR] Too many roles for user {0.display_name}'.format(member))
+        
+        except KeyError as e:
+            print('[ERROR] KeyError, no role found for ' + emoji)
+        except Exception as e:
+            print(repr(e))
+
+
+# Removes a role from user
+@bot.event
+async def on_raw_reaction_remove(ctx):
+    channel = bot.get_channel(ctx.channel_id) 
+    message = await channel.fetch_message(ctx.message_id) 
+    member = get(message.guild.members, id=ctx.user_id) 
+
+    try:
+        emoji = str(ctx.emoji) 
+        role = get(message.guild.roles, id=c.ROLES[emoji]) 
+
+        await member.remove_roles(role)
+        print('[SUCCESS] Role {1.name} has been remove for user {0.display_name}'.format(member, role))
+
+    except KeyError as e:
+        print('[ERROR] KeyError, no role found for ' + emoji)
+    except Exception as e:
+        print(repr(e))
+
+
 # List of bot's commands
 @bot.command(pass_context=True)
 async def help(ctx):
-    emb = discord.Embed(title='Commands list')
-    
-    emb.add_field(name='{}clear'.format(PREFIX), value='Clearing chat')
+    author = ctx.message.author
+    emb = discord.Embed(
+        title='Список команд', 
+        colour = discord.Colour.from_rgb(114, 137, 218)
+    )
 
-    await ctx.send(embed=emb)
+    emb.add_field(name='{}play [battle, civil, journey, mystic]'.format(c.PREFIX), \
+        value="[Мастер] Включу тематическую музыку для атмосферы", inline=False)
+    emb.add_field(name='{}leave'.format(c.PREFIX), \
+        value='[Мастер] Оставлю игроков наедине в голосовом канале', inline=False)    
+    emb.add_field(name='{}roll [dy or xdy]'.format(c.PREFIX), \
+        value='[Мастер и игроки] Брошу кубик, дабы вершить ваши судьбы!', inline=False)
+    emb.add_field(name='{}advRoll [dy or xdy]'.format(c.PREFIX), \
+        value='[Мастер и игроки] Сделаю бросок с преимуществом', inline=False)
+    emb.add_field(name='{}dadvRoll [dy or xdy]'.format(c.PREFIX), \
+        value='[Мастер и игроки] Сделаю бросок с помехой', inline=False)
+    emb.add_field(name='{}deathRoll'.format(c.PREFIX), \
+        value='[Мастер и игроки] Пройдите испытание смерти и узнайте судьбу Вашего персонажа!', inline=False)
+    emb.add_field(name='{}flipCoin'.format(c.PREFIX), \
+        value='[Мастер и игроки] Подбрасывает монетку', inline=False)
+    emb.add_field(name='{}randParams'.format(c.PREFIX), \
+        value='[Мастер и игроки] Генерирует параметры для персонажа', inline=False)
+    emb.add_field(name='{}clear'.format(c.PREFIX), \
+        value='[Администратор и Мастер] Очищает тектовый канал от сообщений', inline=False)
+    emb.add_field(name="{}ban [user's name]".format(c.PREFIX), \
+        value='[Администратор] Казнить, нельзя помиловать!', inline=False)
+    emb.add_field(name="{}unban [user's name]".format(c.PREFIX), \
+        value='[Администратор] Казнить нельзя, помиловать!', inline=False)
+    emb.add_field(name="{}kick [user's name]".format(c.PREFIX), \
+        value='[Администратор] Отправлю игрока в одиноное путешествие...', inline=False)
+
+    await ctx.send(author.mention, embed=emb)
 
 
 # Clears last 100 messages
 @bot.command(pass_content=True)
-@commands.has_permissions(administrator=True)
-async def clear(ctx, amount=100):
+@commands.has_any_role(724400934729416726, 724331608441749656)
+async def clear(ctx, amount=9999):
     await ctx.channel.purge(limit=amount)  
 
 
@@ -42,8 +113,6 @@ async def clear(ctx, amount=100):
 @bot.command(pass_content=True)
 @commands.has_permissions(administrator=True)
 async def kick(ctx, member: discord.Member, *, reason=None):
-    await ctx.channel.purge(limit=1)
-    
     await member.kick(reason=reason)
     await ctx.send(f'User kicked {member.mention}')
 
@@ -52,8 +121,6 @@ async def kick(ctx, member: discord.Member, *, reason=None):
 @bot.command(pass_content=True)
 @commands.has_permissions(administrator=True)
 async def ban(ctx, member: discord.Member, *, reason=None):
-    await ctx.channel.purge(limit = 1)
-    
     await member.ban(reason = reason)
     await ctx.send(f'User banned {member.mention}')
 
@@ -62,8 +129,6 @@ async def ban(ctx, member: discord.Member, *, reason=None):
 @bot.command(pass_context=True)
 @commands.has_permissions(administrator=True)
 async def unban(ctx, *, member):
-    await ctx.channel.purge(limit=1)
-
     banned_users = await ctx.guild.bans()
 
     for ban_entry in banned_users:
@@ -77,6 +142,7 @@ async def unban(ctx, *, member):
 
 # Plays thematic music
 @bot.command(pass_context=True)
+@commands.has_any_role(724400934729416726, 724331608441749656)
 async def play(ctx, music_theme):
     channel = ctx.message.author.voice.channel
     voice = get(bot.voice_clients, guild = ctx.guild)
@@ -96,30 +162,31 @@ async def play(ctx, music_theme):
         voice.source.volume = 0.07
 
 
+@bot.command(pass_context=True)
+@commands.has_any_role(724400934729416726, 724331608441749656)
+async def stop(ctx):
+    channel = ctx.meassage.author.voice.channel
+    voice = get(bot.voice_clients, guild=ctx.guild)
+
+    
+
+
 # Leaves voice chat
 @bot.command(pass_context=True)
+@commands.has_any_role(724400934729416726, 724331608441749656)
 async def leave(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(bot.voice_clients, guild=ctx.guild)
-
+    
     if voice and voice.is_connected():
         await voice.disconnect()
     else:
         voice = await channel.connect()
 
 
-# The most awesome easter-egg in the world XD
-@bot.command(pass_context=True)
-async def YoYoPiraka(ctx):
-    channel = ctx.message.author.voice.channel
-    voice = get(bot.voice_clients, guild=ctx.guild)
-    
-    voice = await channel.connect()
-    voice.play(discord.FFmpegPCMAudio('Piraka Rap.mp3'))
-
-
 # Rolls dices in xdy format
 @bot.command(pass_context=True)
+@commands.has_any_role(724331608441749656, 724331644944646244)
 async def roll(ctx, arg):
     author = ctx.message.author
     result = f.show_score(arg)
@@ -128,6 +195,7 @@ async def roll(ctx, arg):
 
 # Rolls dices with advantage
 @bot.command(pass_context=True)
+@commands.has_any_role(724331608441749656, 724331644944646244)
 async def advRoll(ctx, arg):
     author = ctx.message.author
     result = f.advantage_roll(arg)
@@ -136,6 +204,7 @@ async def advRoll(ctx, arg):
 
 # Rolls dices with disadvantage
 @bot.command(pass_context=True)
+@commands.has_any_role(724331608441749656, 724331644944646244)
 async def dadvRoll(ctx, arg):
     author = ctx.message.author
     result = f.disadvantage_roll(arg)
@@ -144,9 +213,11 @@ async def dadvRoll(ctx, arg):
 
 # Rolls dices to make a death check
 @bot.command(pass_context=True)
+@commands.has_any_role(724331608441749656, 724331644944646244)
 async def deathRoll(ctx):
     author = ctx.message.author
     successes, failures = 0, 0
+
     await ctx.send(f'Бросаю кубики для {author.mention}')
 
     while successes < 3 and failures < 3:
@@ -169,6 +240,7 @@ async def deathRoll(ctx):
 
 # Flips coin 
 @bot.command(pass_context=True)
+@commands.has_any_role(724331608441749656, 724331644944646244)
 async def flipCoin(ctx):
     author = ctx.message.author
     result = f.flip_coin()
@@ -177,9 +249,11 @@ async def flipCoin(ctx):
 
 #Generates random parameters for character
 @bot.command(pass_context=True)
+@commands.has_any_role(724331608441749656, 724331644944646244)
 async def randParams(ctx):
     author = ctx.message.author
     result = f.rand_params()
     await ctx.send(f'{result} {author.mention}')
+
 
 bot.run(c.TOKEN)
