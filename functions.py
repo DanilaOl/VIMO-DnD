@@ -33,7 +33,7 @@ def roll(dice):
 
 def show_score(dice):
     # Prettifying output of roll function
-    if dice[0] == '1' or 'd':
+    if dice[0] in ('1', 'd'):
         return roll(dice)
     else:
         all_scores, final_score = roll(dice)
