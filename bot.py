@@ -10,6 +10,8 @@ from discord.utils import get
 from discord.ext import commands
 from exceptions import WrongCharacterRace, WrongCharacterClass
 
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 bot = commands.Bot(command_prefix=c.PREFIX)
 bot.remove_command('help')
 
@@ -27,14 +29,14 @@ async def on_ready():
 @bot.event
 async def on_raw_reaction_add(ctx):
     if ctx.message_id == c.POST_ID:
-        channel = bot.get_channel(ctx.channel_id) 
-        message = await channel.fetch_message(ctx.message_id) 
-        member = get(message.guild.members, id=ctx.user_id) 
+        channel = bot.get_channel(ctx.channel_id)
+        message = await channel.fetch_message(ctx.message_id)
+        member = get(message.guild.members, id=ctx.user_id)
 
-        emoji = str(ctx.emoji) 
-        role = get(message.guild.roles, id=c.ROLES[emoji]) 
-    
-        if(len([i for i in member.roles]) <= c.MAX_ROLES_PER_USER):
+        emoji = str(ctx.emoji)
+        role = get(message.guild.roles, id=c.ROLES[emoji])
+
+        if len([i for i in member.roles]) <= c.MAX_ROLES_PER_USER:
             await member.add_roles(role)
         else:
             await message.remove_reaction(ctx.emoji, member)
@@ -43,12 +45,12 @@ async def on_raw_reaction_add(ctx):
 # Removes a role from user
 @bot.event
 async def on_raw_reaction_remove(ctx):
-    channel = bot.get_channel(ctx.channel_id) 
-    message = await channel.fetch_message(ctx.message_id) 
-    member = get(message.guild.members, id=ctx.user_id) 
+    channel = bot.get_channel(ctx.channel_id)
+    message = await channel.fetch_message(ctx.message_id)
+    member = get(message.guild.members, id=ctx.user_id)
 
-    emoji = str(ctx.emoji) 
-    role = get(message.guild.roles, id=c.ROLES[emoji]) 
+    emoji = str(ctx.emoji)
+    role = get(message.guild.roles, id=c.ROLES[emoji])
 
     await member.remove_roles(role)
 
@@ -63,29 +65,29 @@ async def help(ctx):
     )
 
     emb.add_field(name='{}play [battle, civil, journey, mystic]'.format(c.PREFIX),
-        value="[Мастер] Включу тематическую музыку для атмосферы", inline=False)
+                  value="[Мастер] Включу тематическую музыку для атмосферы", inline=False)
     emb.add_field(name='{}leave'.format(c.PREFIX),
-        value='[Мастер] Оставлю игроков наедине в голосовом канале', inline=False)
+                  value='[Мастер] Оставлю игроков наедине в голосовом канале', inline=False)
     emb.add_field(name='{}roll [dy or xdy]'.format(c.PREFIX),
-        value='[Мастер и игроки] Брошу кубик, дабы вершить ваши судьбы!', inline=False)
+                  value='[Мастер и игроки] Брошу кубик, дабы вершить ваши судьбы!', inline=False)
     emb.add_field(name='{}advRoll [dy or xdy]'.format(c.PREFIX),
-        value='[Мастер и игроки] Сделаю бросок с преимуществом', inline=False)
+                  value='[Мастер и игроки] Сделаю бросок с преимуществом', inline=False)
     emb.add_field(name='{}dadvRoll [dy or xdy]'.format(c.PREFIX),
-        value='[Мастер и игроки] Сделаю бросок с помехой', inline=False)
+                  value='[Мастер и игроки] Сделаю бросок с помехой', inline=False)
     emb.add_field(name='{}deathRoll'.format(c.PREFIX),
-        value='[Мастер и игроки] Пройдите испытание смерти и узнайте судьбу Вашего персонажа!', inline=False)
+                  value='[Мастер и игроки] Пройдите испытание смерти и узнайте судьбу Вашего персонажа!', inline=False)
     emb.add_field(name='{}flipCoin'.format(c.PREFIX),
-        value='[Мастер и игроки] Подбрасывает монетку', inline=False)
+                  value='[Мастер и игроки] Подбрасывает монетку', inline=False)
     emb.add_field(name='{}randParams'.format(c.PREFIX),
-        value='[Мастер и игроки] Генерирует параметры для персонажа', inline=False)
+                  value='[Мастер и игроки] Генерирует параметры для персонажа', inline=False)
     emb.add_field(name='{}clear'.format(c.PREFIX),
-        value='[Администратор и Мастер] Очищает тектовый канал от сообщений', inline=False)
+                  value='[Администратор и Мастер] Очищает тектовый канал от сообщений', inline=False)
     emb.add_field(name="{}ban [user's name]".format(c.PREFIX),
-        value='[Администратор] Казнить, нельзя помиловать!', inline=False)
+                  value='[Администратор] Казнить, нельзя помиловать!', inline=False)
     emb.add_field(name="{}unban [user's name]".format(c.PREFIX),
-        value='[Администратор] Казнить нельзя, помиловать!', inline=False)
+                  value='[Администратор] Казнить нельзя, помиловать!', inline=False)
     emb.add_field(name="{}kick [user's name]".format(c.PREFIX),
-        value='[Администратор] Отправлю игрока в одиноное путешествие...', inline=False)
+                  value='[Администратор] Отправлю игрока в одиноное путешествие...', inline=False)
 
     await ctx.send(author.mention, embed=emb)
 
@@ -114,7 +116,7 @@ async def unban(ctx, *, member):
         if (user.name, user.discriminator) == (member_name, member_discriminator):
             await ctx.guild.unban(user)
             await ctx.send(f'Unbanned {user.mention}')
-            
+
             return
 
 
@@ -149,8 +151,8 @@ async def leave(ctx):
 @bot.command(pass_context=True)
 async def play(ctx, music_theme):
     voice = get(bot.voice_clients, guild=ctx.guild)
-    
-    os.chdir(f"C:\Users\89154\Desktop\VIMO-DnD\VIMO-DnD\music\{music_theme}")
+
+    os.chdir(f"{ROOT_DIR}\music\{music_theme}")
     track_number = randint(1, f.sum_files())
 
     voice.play(discord.FFmpegPCMAudio(f'{track_number}.mp3'))
