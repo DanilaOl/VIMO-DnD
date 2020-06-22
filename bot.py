@@ -88,22 +88,19 @@ async def help(ctx):
     await ctx.send(author.mention, embed=emb)
 
 
-# Clears last 100 messages
+# Clears last 9999 messages
 @bot.command(pass_content=True)
 async def clear(ctx, amount=9999):
     await ctx.channel.purge(limit=amount)
 
 
-@bot.command()
-async def kick(ctx, member: discord.Member, *, reason=None):
-    await member.kick(reason=reason)
-
-
+# Bans user on server
 @bot.command()
 async def ban(ctx, member: discord.Member, *, reason=None):
     await member.ban(reason=reason)
 
 
+# Unbans user on server
 @bot.command()
 async def unban(ctx, *, member):
     banned_users = await ctx.guild.bans()
@@ -119,39 +116,81 @@ async def unban(ctx, *, member):
             return
 
 
-class Music(discord.Client):
-    
-
-
-# # Plays thematic music
-# @bot.command(pass_context=True)
-# async def play(ctx, music_theme):
-#     channel = ctx.message.author.voice.channel
-#     voice = get(bot.voice_clients, guild=ctx.guild)
-#     await channel.connect()
-
-#     if music_theme == 'battle':
-#         if os.getcwd() != 'music/battle':
-#             os.chdir(f'music/{music_theme}')
-
-#         track_number = randint(1, f.sum_files())
-#         voice.play(discord.FFmpegPCMAudio(f'{track_number}.mp3'))
-#         voice.source = discord.PCMVolumeTransformer(voice.source)
-#         voice.source.volume = 0.07
-
-
-# # Stops current track 
-# @bot.command(pass_context=True)
-# async def stop(ctx):
-#     channel = ctx.meassage.author.voice.channel
-#     voice = get(bot.voice_clients, guild=ctx.guild)
-
-
-# Leaves voice chat
+# Kikcs user from server
 @bot.command()
-async def leave(ctx):
-    await ctx.voice_client.disconnect()
+async def kick(ctx, member: discord.Member, *, reason=None):
+    await member.kick(reason=reason)
 
+
+# Joins voice channel
+@bot.command(pass_context=True)
+async def join(ctx):
+    channel = ctx.message.author.voice.channel
+    voice = get(bot.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+
+
+# leaves voice channel
+@bot.command(pass_context=True)
+async def leave(ctx):
+    voice = get(bot.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.disconnect()
+
+
+# Plays thematic music
+@bot.command(pass_context=True)
+async def play(ctx, music_theme):
+    voice = get(bot.voice_clients, guild=ctx.guild)
+    os.chdir(f'music/{music_theme}')
+
+    if music_theme == 'battle':
+        voice.play(discord.FFmpegPCMAudio('1.mp3'))
+        voice.source = discord.PCMVolumeTransformer(voice.source)
+        voice.source.volume = 0.25
+    elif music_theme == 'civil':
+        voice.play(discord.FFmpegPCMAudio('1.mp3'))
+        voice.source = discord.PCMVolumeTransformer(voice.source)
+        voice.source.volume = 0.25
+    elif music_theme == 'journey':
+        voice.play(discord.FFmpegPCMAudio('1.mp3'))
+        voice.source = discord.PCMVolumeTransformer(voice.source)
+        voice.source.volume = 0.25
+    elif music_theme == 'mystic':
+        voice.play(discord.FFmpegPCMAudio('1.mp3'))
+        voice.source = discord.PCMVolumeTransformer(voice.source)
+        voice.source.volume = 0.25
+
+
+@bot.command(pass_context=True, aliases=['pa', 'pau'])
+async def pause(ctx):
+    voice = get(bot.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_playing():
+        voice.pause()
+
+
+@bot.command(pass_context=True, aliases=['r', 'res'])
+async def resume(ctx):
+    voice = get(bot.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_paused():
+        voice.resume()
+
+
+@bot.command(pass_context=True, aliases=['s', 'sto'])
+async def stop(ctx):
+    voice = get(bot.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_playing():
+        voice.stop()
+
+    
 
 # Rolls dices in xdy format
 @bot.command(pass_context=True)
