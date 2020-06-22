@@ -1,4 +1,5 @@
 import os
+import json
 import random
 
 ALLOWED_EDGES = (4, 6, 8, 10, 12, 20)
@@ -74,3 +75,9 @@ def sum_files():
     # Counts the number of files in working directory
     file_count = next(os.walk(os.getcwd()))[2]
     return len(file_count)
+
+
+def rand_name(race):
+    all_names = json.load(open('names.json', 'r', encoding='utf-8'))
+    name = random.choice(all_names[race])
+    return name

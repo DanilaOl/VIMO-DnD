@@ -289,4 +289,9 @@ async def createCharacter(ctx, *args):
             await author.send(output)
 
 
+@bot.command()
+async def randomName(ctx, race):
+    author = ctx.message.author
+    await ctx.send(f'{f.rand_name(race)} {author.mention}')
+
 bot.run(c.TOKEN)
