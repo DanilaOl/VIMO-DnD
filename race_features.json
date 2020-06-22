@@ -1,0 +1,18 @@
+{
+  "Дварф": {
+    "str_bonus": 0,
+    "dex_bonus": 0,
+    "cons_bonus": 2,
+    "int_bonus": 0,
+    "wis_bonus": 0,
+    "char_bonus": 1
+  },
+  "Эльф": {
+    "str_bonus": 0,
+    "dex_bonus": 0,
+    "cons_bonus": 0,
+    "int_bonus": 0,
+    "wis_bonus": 0,
+    "char_bonus": 0
+  }
+}
