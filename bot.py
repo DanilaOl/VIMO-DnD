@@ -118,22 +118,26 @@ async def unban(ctx, *, member):
             
             return
 
-   
-# Plays thematic music
-@bot.command(pass_context=True)
-async def play(ctx, music_theme):
-    channel = ctx.message.author.voice.channel
-    voice = get(bot.voice_clients, guild=ctx.guild)
-    await channel.connect()
 
-    if music_theme == 'battle':
-        if os.getcwd() != 'music/battle':
-            os.chdir(f'music/{music_theme}')
+class Music(discord.Client):
+    
 
-        track_number = randint(1, f.sum_files())
-        voice.play(discord.FFmpegPCMAudio(f'{track_number}.mp3'))
-        voice.source = discord.PCMVolumeTransformer(voice.source)
-        voice.source.volume = 0.07
+
+# # Plays thematic music
+# @bot.command(pass_context=True)
+# async def play(ctx, music_theme):
+#     channel = ctx.message.author.voice.channel
+#     voice = get(bot.voice_clients, guild=ctx.guild)
+#     await channel.connect()
+
+#     if music_theme == 'battle':
+#         if os.getcwd() != 'music/battle':
+#             os.chdir(f'music/{music_theme}')
+
+#         track_number = randint(1, f.sum_files())
+#         voice.play(discord.FFmpegPCMAudio(f'{track_number}.mp3'))
+#         voice.source = discord.PCMVolumeTransformer(voice.source)
+#         voice.source.volume = 0.07
 
 
 # # Stops current track 
