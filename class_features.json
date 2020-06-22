@@ -1,0 +1,20 @@
+{
+  "Жрец": {
+    "str_bonus": 0,
+    "dex_bonus": 0,
+    "cons_bonus": 0,
+    "int_bonus": 0,
+    "wis_bonus": 0,
+    "char_bonus": 0,
+    "hit_dice": "1d8"
+  },
+  "Воин": {
+    "str_bonus": 0,
+    "dex_bonus": 0,
+    "cons_bonus": 0,
+    "int_bonus": 0,
+    "wis_bonus": 0,
+    "char_bonus": 0,
+    "hit_dice": "1d8"
+  }
+}
