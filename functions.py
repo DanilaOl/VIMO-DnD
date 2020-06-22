@@ -68,3 +68,8 @@ def flip_coin():
     coin = ('Орёл', 'Решка')
     return random.choice(coin)
 
+
+def sum_files():
+    # Counts the number of files in working directory
+    file_count = next(os.walk(os.getcwd()))[2]
+    return len(file_count)

@@ -16,7 +16,7 @@ bot.remove_command('help')
 async def on_ready():
     print('Bot is ready to rock!')
 
-    await bot.change_presence(status=discord.Status.online, 
+    await bot.change_presence(status=discord.Status.online,
                               activity=discord.Game('D&D 5e | -help'))
 
 
@@ -24,21 +24,20 @@ async def on_ready():
 @bot.event
 async def on_raw_reaction_add(ctx):
     if ctx.message_id == c.POST_ID:
-        channel = bot.get_channel(ctx.channel_id) 
-        message = await channel.fetch_message(ctx.message_id) 
-        member = get(message.guild.members, id=ctx.user_id) 
-
+        channel = bot.get_channel(ctx.channel_id)
+        message = await channel.fetch_message(ctx.message_id)
+        member = get(message.guild.members, id=ctx.user_id)
+        emoji = str(ctx.emoji)
         try:
-            emoji = str(ctx.emoji) 
-            role = get(message.guild.roles, id=c.ROLES[emoji]) 
-        
-            if(len([i for i in member.roles if i.id not in c.EXROLES]) <= c.MAX_ROLES_PER_USER):
+            role = get(message.guild.roles, id=c.ROLES[emoji])
+
+            if len([i for i in member.roles if i.id not in c.EXROLES]) <= c.MAX_ROLES_PER_USER:
                 await member.add_roles(role)
                 print('[SUCCESS] User {0.display_name} has been granted with role {1.name}'.format(member, role))
             else:
                 await message.remove_reaction(ctx.emoji, member)
                 print('[ERROR] Too many roles for user {0.display_name}'.format(member))
-        
+
         except KeyError as e:
             print('[ERROR] KeyError, no role found for ' + emoji)
         except Exception as e:
@@ -48,13 +47,13 @@ async def on_raw_reaction_add(ctx):
 # Removes a role from user
 @bot.event
 async def on_raw_reaction_remove(ctx):
-    channel = bot.get_channel(ctx.channel_id) 
-    message = await channel.fetch_message(ctx.message_id) 
-    member = get(message.guild.members, id=ctx.user_id) 
+    channel = bot.get_channel(ctx.channel_id)
+    message = await channel.fetch_message(ctx.message_id)
+    member = get(message.guild.members, id=ctx.user_id)
 
     try:
-        emoji = str(ctx.emoji) 
-        role = get(message.guild.roles, id=c.ROLES[emoji]) 
+        emoji = str(ctx.emoji)
+        role = get(message.guild.roles, id=c.ROLES[emoji])
 
         await member.remove_roles(role)
         print('[SUCCESS] Role {1.name} has been remove for user {0.display_name}'.format(member, role))
@@ -70,34 +69,34 @@ async def on_raw_reaction_remove(ctx):
 async def help(ctx):
     author = ctx.message.author
     emb = discord.Embed(
-        title='Список команд', 
-        colour = discord.Colour.from_rgb(114, 137, 218)
+        title='Список команд',
+        colour=discord.Colour.from_rgb(114, 137, 218)
     )
 
-    emb.add_field(name='{}play [battle, civil, journey, mystic]'.format(c.PREFIX), \
-        value="[Мастер] Включу тематическую музыку для атмосферы", inline=False)
-    emb.add_field(name='{}leave'.format(c.PREFIX), \
-        value='[Мастер] Оставлю игроков наедине в голосовом канале', inline=False)    
-    emb.add_field(name='{}roll [dy or xdy]'.format(c.PREFIX), \
-        value='[Мастер и игроки] Брошу кубик, дабы вершить ваши судьбы!', inline=False)
-    emb.add_field(name='{}advRoll [dy or xdy]'.format(c.PREFIX), \
-        value='[Мастер и игроки] Сделаю бросок с преимуществом', inline=False)
-    emb.add_field(name='{}dadvRoll [dy or xdy]'.format(c.PREFIX), \
-        value='[Мастер и игроки] Сделаю бросок с помехой', inline=False)
-    emb.add_field(name='{}deathRoll'.format(c.PREFIX), \
-        value='[Мастер и игроки] Пройдите испытание смерти и узнайте судьбу Вашего персонажа!', inline=False)
-    emb.add_field(name='{}flipCoin'.format(c.PREFIX), \
-        value='[Мастер и игроки] Подбрасывает монетку', inline=False)
-    emb.add_field(name='{}randParams'.format(c.PREFIX), \
-        value='[Мастер и игроки] Генерирует параметры для персонажа', inline=False)
-    emb.add_field(name='{}clear'.format(c.PREFIX), \
-        value='[Администратор и Мастер] Очищает тектовый канал от сообщений', inline=False)
-    emb.add_field(name="{}ban [user's name]".format(c.PREFIX), \
-        value='[Администратор] Казнить, нельзя помиловать!', inline=False)
-    emb.add_field(name="{}unban [user's name]".format(c.PREFIX), \
-        value='[Администратор] Казнить нельзя, помиловать!', inline=False)
-    emb.add_field(name="{}kick [user's name]".format(c.PREFIX), \
-        value='[Администратор] Отправлю игрока в одиноное путешествие...', inline=False)
+    emb.add_field(name='{}play [battle, civil, journey, mystic]'.format(c.PREFIX),
+                  value="[Мастер] Включу тематическую музыку для атмосферы", inline=False)
+    emb.add_field(name='{}leave'.format(c.PREFIX),
+                  value='[Мастер] Оставлю игроков наедине в голосовом канале', inline=False)
+    emb.add_field(name='{}roll [dy or xdy]'.format(c.PREFIX),
+                  value='[Мастер и игроки] Брошу кубик, дабы вершить ваши судьбы!', inline=False)
+    emb.add_field(name='{}advRoll [dy or xdy]'.format(c.PREFIX),
+                  value='[Мастер и игроки] Сделаю бросок с преимуществом', inline=False)
+    emb.add_field(name='{}dadvRoll [dy or xdy]'.format(c.PREFIX),
+                  value='[Мастер и игроки] Сделаю бросок с помехой', inline=False)
+    emb.add_field(name='{}deathRoll'.format(c.PREFIX),
+                  value='[Мастер и игроки] Пройдите испытание смерти и узнайте судьбу Вашего персонажа!', inline=False)
+    emb.add_field(name='{}flipCoin'.format(c.PREFIX),
+                  value='[Мастер и игроки] Подбрасывает монетку', inline=False)
+    emb.add_field(name='{}randParams'.format(c.PREFIX),
+                  value='[Мастер и игроки] Генерирует параметры для персонажа', inline=False)
+    emb.add_field(name='{}clear'.format(c.PREFIX),
+                  value='[Администратор и Мастер] Очищает тектовый канал от сообщений', inline=False)
+    emb.add_field(name="{}ban [user's name]".format(c.PREFIX),
+                  value='[Администратор] Казнить, нельзя помиловать!', inline=False)
+    emb.add_field(name="{}unban [user's name]".format(c.PREFIX),
+                  value='[Администратор] Казнить нельзя, помиловать!', inline=False)
+    emb.add_field(name="{}kick [user's name]".format(c.PREFIX),
+                  value='[Администратор] Отправлю игрока в одиноное путешествие...', inline=False)
 
     await ctx.send(author.mention, embed=emb)
 
@@ -106,7 +105,7 @@ async def help(ctx):
 @bot.command(pass_content=True)
 @commands.has_any_role(724400934729416726, 724331608441749656)
 async def clear(ctx, amount=9999):
-    await ctx.channel.purge(limit=amount)  
+    await ctx.channel.purge(limit=amount)
 
 
 # Kicks user
@@ -121,7 +120,7 @@ async def kick(ctx, member: discord.Member, *, reason=None):
 @bot.command(pass_content=True)
 @commands.has_permissions(administrator=True)
 async def ban(ctx, member: discord.Member, *, reason=None):
-    await member.ban(reason = reason)
+    await member.ban(reason=reason)
     await ctx.send(f'User banned {member.mention}')
 
 
@@ -137,15 +136,16 @@ async def unban(ctx, *, member):
         await ctx.guild.unban(user)
         await ctx.send(f'User unbanned {user.mention}')
 
-        return 
-    
+        return
 
-# Plays thematic music
+    # Plays thematic music
+
+
 @bot.command(pass_context=True)
 @commands.has_any_role(724400934729416726, 724331608441749656)
 async def play(ctx, music_theme):
     channel = ctx.message.author.voice.channel
-    voice = get(bot.voice_clients, guild = ctx.guild)
+    voice = get(bot.voice_clients, guild=ctx.guild)
 
     if voice and voice.is_connected():
         await voice.move_to(channel)
@@ -168,8 +168,6 @@ async def stop(ctx):
     channel = ctx.meassage.author.voice.channel
     voice = get(bot.voice_clients, guild=ctx.guild)
 
-    
-
 
 # Leaves voice chat
 @bot.command(pass_context=True)
@@ -177,7 +175,7 @@ async def stop(ctx):
 async def leave(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(bot.voice_clients, guild=ctx.guild)
-    
+
     if voice and voice.is_connected():
         await voice.disconnect()
     else:
@@ -247,13 +245,35 @@ async def flipCoin(ctx):
     await ctx.send(f'{result} {author.mention}')
 
 
-#Generates random parameters for character
+# Generates random parameters for character
 @bot.command(pass_context=True)
 @commands.has_any_role(724331608441749656, 724331644944646244)
 async def randParams(ctx):
     author = ctx.message.author
     result = f.rand_params()
     await ctx.send(f'{result} {author.mention}')
+
+
+# Creates character using your stats
+@bot.command()
+async def createCharacter(ctx, *args):
+    author = ctx.message.author
+    await ctx.send(f"{args}")
+    if len(args) != 9:
+        await ctx.send(f'Передано недостаточно аргументов\n'
+                       f'Синтакс команды -createCharacter\n'
+                       f'ИмяПерсонажа  Раса Класс Сила Ловкость Телосложение Интеллект Мудрость Харизма\n'
+                       f'{author.mention}')
+
+    elif (type(args[0]) is not str) or (type(args[1]) is not str) or (type(args[2]) is not str):
+        await ctx.send(f'Неправильный порядок аргументов \n'
+                       f'Синтакс команды -createCharacter\n'
+                       f'ИмяПерсонажа  Раса Класс Сила Ловкость Телосложение Интеллект Мудрость Харизма\n'
+                       f'{author.mention}')
+
+    else:
+        output = ch.create_character(*args)
+        await author.send(output)
 
 
 bot.run(c.TOKEN)
