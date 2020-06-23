@@ -36,7 +36,7 @@ async def on_raw_reaction_add(ctx):
         emoji = str(ctx.emoji)
         role = get(message.guild.roles, id=c.ROLES[emoji])
 
-        if len([i for i in member.roles if i.id not in c.EXCROLE.values]) <= c.MAX_ROLES_PER_USER:
+        if (len(if member.roles != c.EXCROLE) <= c.MAX_ROLES_PER_USER):
             await member.add_roles(role)
         else:
             await message.remove_reaction(ctx.emoji, member)
