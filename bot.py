@@ -15,10 +15,6 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 bot = commands.Bot(command_prefix=c.PREFIX)
 bot.remove_command('help')
 
-discord.opus.load_opus()
-if not discord.opus.is_loaded():
-    raise RunTimeError('Opus failed to load')
-
 
 # Checking for connection and setting up a status
 @bot.event
