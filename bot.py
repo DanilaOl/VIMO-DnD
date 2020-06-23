@@ -67,30 +67,50 @@ async def help(ctx):
         colour=discord.Colour.from_rgb(114, 137, 218)
     )
 
-    emb.add_field(name='{}play [battle, civil, journey, mystic]'.format(c.PREFIX),
-                  value="[Мастер] Включу тематическую музыку для атмосферы", inline=False)
+    emb.add_field(name='{}join'.format(c.PREFIX),
+                  value="[Мастер] Только свистните и я появлюсь в голосовом канале!", inline=False)
+    
     emb.add_field(name='{}leave'.format(c.PREFIX),
-                  value='[Мастер] Оставлю игроков наедине в голосовом канале', inline=False)
-    emb.add_field(name='{}roll [dy or xdy]'.format(c.PREFIX),
+                  value='[Мастер] Оставлю игроков наедине в голосовом канале...', inline=False)
+    
+    emb.add_field(name='{}play [battle, civil, journey, mystic]'.format(c.PREFIX),
+                  value='[Мастер] Бард, сыграй что-нибудь!', inline=False)
+    
+    emb.add_field(name='{}pause'.format(c.PREFIX),
+                  value='[Мастер] Кому-то нужно отойти? Сейчас поставим музыку на паузу!', inline=False)
+    
+    emb.add_field(name='{}resume'.format(c.PREFIX),
+                  value='[Мастер] Ну что ж, игроки, продолжим!', inline=False)
+    
+    emb.add_field(name='{}stop'.format(c.PREFIX),
+                  value='[Мастер] Эй, бард, игрокам не нравится музыка, хватит играть!', inline=False)
+    
+    emb.add_field(name='{}roll [dy или xdy]'.format(c.PREFIX),
                   value='[Мастер и игроки] Брошу кубик, дабы вершить ваши судьбы!', inline=False)
-    emb.add_field(name='{}advRoll [dy or xdy]'.format(c.PREFIX),
+    
+    emb.add_field(name='{}advRoll [dy или xdy]'.format(c.PREFIX),
                   value='[Мастер и игроки] Сделаю бросок с преимуществом', inline=False)
+   
     emb.add_field(name='{}dadvRoll [dy or xdy]'.format(c.PREFIX),
                   value='[Мастер и игроки] Сделаю бросок с помехой', inline=False)
+    
     emb.add_field(name='{}deathRoll'.format(c.PREFIX),
                   value='[Мастер и игроки] Пройдите испытание смерти и узнайте судьбу Вашего персонажа!', inline=False)
+    
     emb.add_field(name='{}flipCoin'.format(c.PREFIX),
-                  value='[Мастер и игроки] Подбрасывает монетку', inline=False)
+                  value='[Мастер и игроки] Сколько уже веков решают вопросы монеткой?', inline=False)
+    
+    emb.add_field(name='{}randName [race]'.format(c.PREFIX),
+                  value='[Мастер и игроки] Давай подберём тебе имя!', inline=False)
+    
     emb.add_field(name='{}randParams'.format(c.PREFIX),
-                  value='[Мастер и игроки] Генерирует параметры для персонажа', inline=False)
+                  value='[Мастер и игроки] Не можете подобрать характеристики? Сейчас исправим', inline=False)
+    
+    emb.add_field(name='{}createCharacter [Имя] [Раса] [Класс] [Сила] [Лов.] [Телосл.] [Инт.] [Мудр.] [Хар.]'.format(c.PREFIX),
+                  value='[Мастер и игроки] Как это у тебя нет персонажа? Ничего, сейчас сделаем!', inline=False)
+    
     emb.add_field(name='{}clear'.format(c.PREFIX),
-                  value='[Администратор и Мастер] Очищает тектовый канал от сообщений', inline=False)
-    emb.add_field(name="{}ban [user's name]".format(c.PREFIX),
-                  value='[Администратор] Казнить, нельзя помиловать!', inline=False)
-    emb.add_field(name="{}unban [user's name]".format(c.PREFIX),
-                  value='[Администратор] Казнить нельзя, помиловать!', inline=False)
-    emb.add_field(name="{}kick [user's name]".format(c.PREFIX),
-                  value='[Администратор] Отправлю игрока в одиноное путешествие...', inline=False)
+                  value='[Администратор и Мастер] Опять они там словоблудят! Эх, снова нужно чистить чат...', inline=False)
 
     await ctx.send(author.mention, embed=emb)
 
@@ -263,9 +283,15 @@ async def flipCoin(ctx):
     await ctx.send(f'{result} {author.mention}')
 
 
+# Creates a random name for character
+@bot.command(pass_context=True)
+async def randName(ctx, race):
+    author = ctx.message.author
+    await ctx.send(f'{f.rand_name(race)} {author.mention}')
+
+
 # Generates random parameters for character
 @bot.command(pass_context=True)
-@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'], c.ROLES['🧝'])
 async def randParams(ctx):
     author = ctx.message.author
     result = f.rand_params()
@@ -304,14 +330,6 @@ async def createCharacter(ctx, *args):
                            f'{allowed_classes} {author.mention}')
         else:
             await author.send(output)
-
-
-# Creates a random name for character
-@bot.command(pass_context=True)
-@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'], c.ROLES['🧝'])
-async def randomName(ctx, race):
-    author = ctx.message.author
-    await ctx.send(f'{f.rand_name(race)} {author.mention}')
 
 
 # And here magic begins)

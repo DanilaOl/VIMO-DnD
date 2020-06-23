@@ -14,7 +14,7 @@ def roll(dice):
         rolls_qnt = '1'
     rolls_qnt, edges = int(rolls_qnt), int(edges)
     if edges not in ALLOWED_EDGES:
-        return 'Нет кубика с такими гранями'
+        return 'Ты где такой кубик видел?'
 
     elif rolls_qnt == 1:
         score = random.randint(1, edges)
@@ -78,6 +78,7 @@ def sum_files():
 
 
 def rand_name(race):
+    # Randomize a name for a specific race
     all_names = json.load(open('names.json', 'r', encoding='utf-8'))
     name = random.choice(all_names[race])
     return name
