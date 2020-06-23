@@ -8,6 +8,6 @@ ROLES = {
     '📺': 724957299654918154, # Viewer
 }
 
-EXCROLE = {'👨‍💻': 724957301303279626} # Administrator
+EXCROLE = {'admin': 724957301303279626} # Administrator
 
 MAX_ROLES_PER_USER = 1 # Max of roles per user
