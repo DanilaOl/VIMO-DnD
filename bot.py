@@ -36,7 +36,7 @@ async def on_raw_reaction_add(ctx):
         emoji = str(ctx.emoji)
         role = get(message.guild.roles, id=c.ROLES[emoji])
 
-        if len([i for i in member.roles]) <= c.MAX_ROLES_PER_USER:
+        if len([i for i in member.roles if i.id not in c.EXCROLE.values]) <= c.MAX_ROLES_PER_USER:
             await member.add_roles(role)
         else:
             await message.remove_reaction(ctx.emoji, member)
@@ -94,18 +94,21 @@ async def help(ctx):
 
 # Clears last 9999 messages
 @bot.command(pass_content=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'])
 async def clear(ctx, amount=9999):
     await ctx.channel.purge(limit=amount)
 
 
 # Bans user on server
-@bot.command()
+@bot.command(pass_context=True)
+@commands.has_role(c.EXCROLE['👨‍💻'])
 async def ban(ctx, member: discord.Member, *, reason=None):
     await member.ban(reason=reason)
 
 
 # Unbans user on server
-@bot.command()
+@bot.command(pass_context=True)
+@commands.has_role(c.EXCROLE['👨‍💻'])
 async def unban(ctx, *, member):
     banned_users = await ctx.guild.bans()
     member_name, member_discriminator = member.split('#')
@@ -120,14 +123,16 @@ async def unban(ctx, *, member):
             return
 
 
-# Kikcs user from server
-@bot.command()
+# Kicks user from server
+@bot.command(pass_context=True)
+@commands.has_role(c.EXCROLE['👨‍💻'])
 async def kick(ctx, member: discord.Member, *, reason=None):
     await member.kick(reason=reason)
 
 
 # Joins voice channel
 @bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'])
 async def join(ctx):
     channel = ctx.message.author.voice.channel
     voice = get(bot.voice_clients, guild=ctx.guild)
@@ -140,6 +145,7 @@ async def join(ctx):
 
 # leaves voice channel
 @bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'])
 async def leave(ctx):
     voice = get(bot.voice_clients, guild=ctx.guild)
 
@@ -149,6 +155,7 @@ async def leave(ctx):
 
 # Plays thematic music
 @bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'])
 async def play(ctx, music_theme):
     voice = get(bot.voice_clients, guild=ctx.guild)
 
@@ -162,6 +169,7 @@ async def play(ctx, music_theme):
 
 # Pauses music
 @bot.command(pass_context=True, aliases=['pa', 'pau'])
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'])
 async def pause(ctx):
     voice = get(bot.voice_clients, guild=ctx.guild)
 
@@ -170,7 +178,8 @@ async def pause(ctx):
 
 
 # Resumes music
-@bot.command(pass_context=True, aliases=['r', 'res'])
+@bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'])
 async def resume(ctx):
     voice = get(bot.voice_clients, guild=ctx.guild)
 
@@ -179,7 +188,8 @@ async def resume(ctx):
 
 
 # Stops music
-@bot.command(pass_context=True, aliases=['s', 'sto'])
+@bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'])
 async def stop(ctx):
     voice = get(bot.voice_clients, guild=ctx.guild)
 
@@ -189,6 +199,7 @@ async def stop(ctx):
 
 # Rolls dices in xdy format
 @bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'], c.ROLES['🧝'])
 async def roll(ctx, arg):
     author = ctx.message.author
     result = f.show_score(arg)
@@ -197,6 +208,7 @@ async def roll(ctx, arg):
 
 # Rolls dices with advantage
 @bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'], c.ROLES['🧝'])
 async def advRoll(ctx, arg):
     author = ctx.message.author
     result = f.advantage_roll(arg)
@@ -205,6 +217,7 @@ async def advRoll(ctx, arg):
 
 # Rolls dices with disadvantage
 @bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'], c.ROLES['🧝'])
 async def dadvRoll(ctx, arg):
     author = ctx.message.author
     result = f.disadvantage_roll(arg)
@@ -213,6 +226,7 @@ async def dadvRoll(ctx, arg):
 
 # Rolls dices to make a death check
 @bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'], c.ROLES['🧝'])
 async def deathRoll(ctx):
     author = ctx.message.author
     successes, failures = 0, 0
@@ -239,6 +253,7 @@ async def deathRoll(ctx):
 
 # Flips coin 
 @bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'], c.ROLES['🧝'])
 async def flipCoin(ctx):
     author = ctx.message.author
     result = f.flip_coin()
@@ -247,6 +262,7 @@ async def flipCoin(ctx):
 
 # Generates random parameters for character
 @bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'], c.ROLES['🧝'])
 async def randParams(ctx):
     author = ctx.message.author
     result = f.rand_params()
@@ -254,7 +270,8 @@ async def randParams(ctx):
 
 
 # Creates character using your stats
-@bot.command()
+@bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'], c.ROLES['🧝'])
 async def createCharacter(ctx, *args):
     author = ctx.message.author
     if len(args) != 9:
@@ -286,7 +303,9 @@ async def createCharacter(ctx, *args):
             await author.send(output)
 
 
-@bot.command()
+# Creates a random name for character
+@bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['👨‍💻'], c.ROLES['🧙'], c.ROLES['🧝'])
 async def randomName(ctx, race):
     author = ctx.message.author
     await ctx.send(f'{f.rand_name(race)} {author.mention}')
