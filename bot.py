@@ -120,7 +120,7 @@ async def unban(ctx, *, member):
             return
 
 
-# Kikcs user from server
+# Kicks user from server
 @bot.command()
 async def kick(ctx, member: discord.Member, *, reason=None):
     await member.kick(reason=reason)
