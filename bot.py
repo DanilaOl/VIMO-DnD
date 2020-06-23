@@ -182,7 +182,7 @@ async def leave(ctx):
 async def play(ctx, music_theme):
     voice = get(bot.voice_clients, guild=ctx.guild)
 
-    os.chdir(rf"{ROOT_DIR}\music\{music_theme}")
+    os.chdir(os.path.join(ROOT_DIR, 'music', music_theme))
     track_number = randint(1, f.sum_files())
 
     voice.play(discord.FFmpegPCMAudio(f'{track_number}.mp3'))
