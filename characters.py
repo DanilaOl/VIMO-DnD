@@ -7,6 +7,7 @@ class_features = json.load(open('class_features.json', 'r', encoding='utf-8'))
 
 
 def create_character(name, race, ch_class, strength, dexterity, constitution, intelligence, wisdom, charisma):
+    # Creates character using your stats
     strength = int(strength)
     dexterity = int(dexterity)
     constitution = int(constitution)
@@ -21,7 +22,7 @@ def create_character(name, race, ch_class, strength, dexterity, constitution, in
         apply_class_bonuses(ch_class, strength, dexterity, constitution, intelligence, wisdom, charisma)
 
     str_mod, dex_mod, cons_mod, int_mod, wis_mod, char_mod = \
-        calc_modificators(strength, dexterity, constitution, intelligence, wisdom, charisma)
+        calc_modifiers(strength, dexterity, constitution, intelligence, wisdom, charisma)
 
     hit_points = calc_hit_points(ch_class, cons_mod)
 
@@ -41,6 +42,7 @@ def create_character(name, race, ch_class, strength, dexterity, constitution, in
 
 
 def apply_race_bonuses(race, strength, dexterity, constitution, intelligence, wisdom, charisma):
+    # Function that applies race bonuses to the stats
     try:
         strength += int(race_features[race]['str_bonus'])
         dexterity += race_features[race]['dex_bonus']
@@ -55,6 +57,7 @@ def apply_race_bonuses(race, strength, dexterity, constitution, intelligence, wi
 
 
 def apply_class_bonuses(ch_class, strength, dexterity, constitution, intelligence, wisdom, charisma):
+    # Function that applies race bonuses to the stats
     try:
         strength += class_features[ch_class]['str_bonus']
         dexterity += class_features[ch_class]['dex_bonus']
@@ -67,7 +70,8 @@ def apply_class_bonuses(ch_class, strength, dexterity, constitution, intelligenc
     return strength, dexterity, constitution, intelligence, wisdom, charisma
 
 
-def calc_modificators(strength, dexterity, constitution, intelligence, wisdom, charisma):
+def calc_modifiers(strength, dexterity, constitution, intelligence, wisdom, charisma):
+    # Calculates modifiers for the stats
     str_mod = floor((int(strength) - 10) / 2)
     dex_mod = floor((int(dexterity) - 10) / 2)
     cons_mod = floor((int(constitution) - 10) / 2)
@@ -78,5 +82,6 @@ def calc_modificators(strength, dexterity, constitution, intelligence, wisdom, c
 
 
 def calc_hit_points(ch_class, cons_mod):
+    # Calculates maximum hit points for the character
     hit_points = int(class_features[ch_class]['hit_dice'][2:]) + cons_mod
     return hit_points
