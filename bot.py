@@ -75,6 +75,9 @@ async def help(ctx):
     
     emb.add_field(name='{}play [battle, civil, journey, mystic]'.format(c.PREFIX),
                   value='[Мастер] Бард, сыграй что-нибудь!', inline=False)
+
+    emb.add_field(name='{}fanfare'.format(c.PREFIX),
+                  value='[Мастер] Да отпразднуем победу над монстрами!', inline=False)
     
     emb.add_field(name='{}pause'.format(c.PREFIX),
                   value='[Мастер] Кому-то нужно отойти? Сейчас поставим музыку на паузу!', inline=False)
@@ -110,7 +113,7 @@ async def help(ctx):
                   value='[Мастер и игроки] Как это у тебя нет персонажа? Ничего, сейчас сделаем!', inline=False)
     
     emb.add_field(name='{}clear'.format(c.PREFIX),
-                  value='[Администратор и Мастер] Опять они там словоблудят! Эх, снова нужно чистить чат...', inline=False)
+                  value='[Мастер] Опять они там словоблудят! Эх, снова нужно чистить чат...', inline=False)
 
     await ctx.send(author.mention, embed=emb)
 
