@@ -182,6 +182,9 @@ async def leave(ctx):
 async def play(ctx, music_theme):
     voice = get(bot.voice_clients, guild=ctx.guild)
 
+    if voice and voice.is_playing():
+        voice.stop()
+
     os.chdir(os.path.join(ROOT_DIR, 'music', music_theme))
     track_number = randint(1, f.sum_files())
 
@@ -190,8 +193,24 @@ async def play(ctx, music_theme):
     voice.source.volume = 0.25
 
 
+# Celebrate success of the battle!
+@bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['admin'], c.ROLES['🧙'])
+async def fanfare(ctx):
+    voice = get(bot.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_playing():
+        voice.stop()
+
+    os.chdir(os.path.join(ROOT_DIR, 'music'))
+
+    voice.play(discord.FFmpegPCMAudio('Fanfare.mp3'))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 0.25
+
+
 # Pauses music
-@bot.command(pass_context=True, aliases=['pa', 'pau'])
+@bot.command(pass_context=True)
 @commands.has_any_role(c.EXCROLE['admin'], c.ROLES['🧙'])
 async def pause(ctx):
     voice = get(bot.voice_clients, guild=ctx.guild)
