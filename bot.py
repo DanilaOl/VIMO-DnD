@@ -36,8 +36,14 @@ async def on_raw_reaction_add(ctx):
         emoji = str(ctx.emoji)
         role = get(message.guild.roles, id=c.ROLES[emoji])
         admin_role = get(message.guild.roles, id=c.EXCROLE['admin'])
-        
-        if admin_role in member.roles and len(member.roles) <= (c.MAX_ROLES_PER_USER + 1):
+        master_role = get(message.guild.roles, id=c.ROLES['🧙'])
+
+        if role == master_role:
+            if len(master_role.members) < 1:
+                await member.add_roles(role)
+            else:
+                await message.remove_reaction(ctx.emoji, member)
+        elif admin_role in member.roles and len(member.roles) <= (c.MAX_ROLES_PER_USER + 1):
             await member.add_roles(role)
         elif len(member.roles) <= c.MAX_ROLES_PER_USER:
             await member.add_roles(role)
