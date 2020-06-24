@@ -116,7 +116,7 @@ async def help(ctx):
                   value='[Мастер] Опять они там словоблудят! Эх, снова нужно чистить чат...', inline=False)
 
     emb.add_field(name='{}credits'.format(c.PREFIX),
-                  value='[Мастер и игроки] Давайте же узнаем кто меня сделал!', inline=False)
+                  value='[Мастер и игроки] Давайте же узнаем имена моих создателей!', inline=False)
 
     await ctx.send(author.mention, embed=emb)
 
