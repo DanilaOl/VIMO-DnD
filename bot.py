@@ -354,6 +354,20 @@ async def createCharacter(ctx, *args):
             await author.send(output)
 
 
+# Authors fo this creation
+@bot.command(pass_context=True)
+async def credits(ctx):
+    author = ctx.message.author
+    emb = discord.Embed(
+        title='~Авторы бота~',
+        colour=discord.Colour.from_rgb(114, 137, 218)
+    )
+
+    emb.add_field(name='VIMO Bots Division:'.format(c.PREFIX), value='Власов Даниил\n''Олянин Данила\n', inline=False)
+    
+    await ctx.send(author.mention, embed=emb)
+
+
 # And here magic begins)
 TOKEN = open('token.txt', 'r').readline()
 bot.run(TOKEN)
