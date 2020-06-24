@@ -73,55 +73,55 @@ async def help(ctx):
         colour=discord.Colour.from_rgb(114, 137, 218)
     )
 
-    emb.add_field(name='{}join'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}join',
                   value="[Мастер] Только свистните и я появлюсь в голосовом канале!", inline=False)
     
-    emb.add_field(name='{}leave'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}leave',
                   value='[Мастер] Оставлю игроков наедине в голосовом канале...', inline=False)
     
-    emb.add_field(name='{}play [battle, civil, journey, mystic]'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}play [battle, civil, journey, mystic]',
                   value='[Мастер] Бард, сыграй что-нибудь!', inline=False)
 
-    emb.add_field(name='{}fanfare'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}fanfare',
                   value='[Мастер] Да отпразднуем победу над монстрами!', inline=False)
     
-    emb.add_field(name='{}pause'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}pause',
                   value='[Мастер] Кому-то нужно отойти? Сейчас поставим музыку на паузу!', inline=False)
     
-    emb.add_field(name='{}resume'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}resume',
                   value='[Мастер] Ну что ж, игроки, продолжим!', inline=False)
     
-    emb.add_field(name='{}stop'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}stop',
                   value='[Мастер] Эй, бард, игрокам не нравится музыка, хватит играть!', inline=False)
     
-    emb.add_field(name='{}roll [dy или xdy]'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}roll [dy или xdy]',
                   value='[Мастер и игроки] Брошу кубик, дабы вершить ваши судьбы!', inline=False)
     
-    emb.add_field(name='{}advRoll [dy или xdy]'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}advRoll [dy или xdy]',
                   value='[Мастер и игроки] Сделаю бросок с преимуществом', inline=False)
    
-    emb.add_field(name='{}dadvRoll [dy or xdy]'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}dadvRoll [dy or xdy]',
                   value='[Мастер и игроки] Сделаю бросок с помехой', inline=False)
     
-    emb.add_field(name='{}deathRoll'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}deathRoll',
                   value='[Мастер и игроки] Пройдите испытание смерти и узнайте судьбу Вашего персонажа!', inline=False)
     
-    emb.add_field(name='{}flipCoin'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}flipCoin',
                   value='[Мастер и игроки] Сколько уже веков решают вопросы монеткой?', inline=False)
     
-    emb.add_field(name='{}randName [race]'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}randName [race]',
                   value='[Мастер и игроки] Давай подберём тебе имя!', inline=False)
     
-    emb.add_field(name='{}randParams'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}randParams',
                   value='[Мастер и игроки] Не можете подобрать характеристики? Сейчас исправим', inline=False)
     
-    emb.add_field(name='{}createCharacter [Имя] [Раса] [Класс] [Сила] [Лов.] [Телосл.] [Инт.] [Мудр.] [Хар.]'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}createCharacter [Имя] [Раса] [Класс] [Сила] [Лов.] [Телосл.] [Инт.] [Мудр.] [Хар.]',
                   value='[Мастер и игроки] Как это у тебя нет персонажа? Ничего, сейчас сделаем!', inline=False)
     
-    emb.add_field(name='{}clear'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}clear',
                   value='[Мастер] Опять они там словоблудят! Эх, снова нужно чистить чат...', inline=False)
 
-    emb.add_field(name='{}credits'.format(c.PREFIX),
+    emb.add_field(name=f'{c.PREFIX}credits',
                   value='[Мастер и игроки] Давайте же узнаем имена моих создателей!', inline=False)
 
     await ctx.send(author.mention, embed=emb)
@@ -175,7 +175,7 @@ async def join(ctx):
     if voice and voice.is_connected():
         await voice.move_to(channel)
     else:
-        voice = await channel.connect()
+        await channel.connect()
 
 
 # leaves voice channel
