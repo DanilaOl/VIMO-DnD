@@ -372,7 +372,7 @@ async def credits(ctx):
         colour=discord.Colour.from_rgb(114, 137, 218)
     )
 
-    emb.add_field(name='VIMO Bots Division:'.format(c.PREFIX), value='Власов Даниил\n''Олянин Данила\n', inline=False)
+    emb.add_field(name='VIMO Non-games Development Unit:'.format(c.PREFIX), value='Власов Даниил\n''Олянин Данила\n', inline=False)
     
     await ctx.send(author.mention, embed=emb)
 
