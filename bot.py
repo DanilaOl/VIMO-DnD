@@ -81,6 +81,9 @@ async def help(ctx):
     
     emb.add_field(name='{}play [battle, civil, journey, mystic]'.format(c.PREFIX),
                   value='[Мастер] Бард, сыграй что-нибудь!', inline=False)
+
+    emb.add_field(name='{}fanfare'.format(c.PREFIX),
+                  value='[Мастер] Да отпразднуем победу над монстрами!', inline=False)
     
     emb.add_field(name='{}pause'.format(c.PREFIX),
                   value='[Мастер] Кому-то нужно отойти? Сейчас поставим музыку на паузу!', inline=False)
@@ -116,7 +119,10 @@ async def help(ctx):
                   value='[Мастер и игроки] Как это у тебя нет персонажа? Ничего, сейчас сделаем!', inline=False)
     
     emb.add_field(name='{}clear'.format(c.PREFIX),
-                  value='[Администратор и Мастер] Опять они там словоблудят! Эх, снова нужно чистить чат...', inline=False)
+                  value='[Мастер] Опять они там словоблудят! Эх, снова нужно чистить чат...', inline=False)
+
+    emb.add_field(name='{}credits'.format(c.PREFIX),
+                  value='[Мастер и игроки] Давайте же узнаем имена моих создателей!', inline=False)
 
     await ctx.send(author.mention, embed=emb)
 
@@ -188,6 +194,9 @@ async def leave(ctx):
 async def play(ctx, music_theme):
     voice = get(bot.voice_clients, guild=ctx.guild)
 
+    if voice and voice.is_playing():
+        voice.stop()
+
     os.chdir(os.path.join(ROOT_DIR, 'music', music_theme))
     track_number = randint(1, f.sum_files())
 
@@ -196,8 +205,24 @@ async def play(ctx, music_theme):
     voice.source.volume = 0.25
 
 
+# Celebrate success of the battle!
+@bot.command(pass_context=True)
+@commands.has_any_role(c.EXCROLE['admin'], c.ROLES['🧙'])
+async def fanfare(ctx):
+    voice = get(bot.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_playing():
+        voice.stop()
+
+    os.chdir(os.path.join(ROOT_DIR, 'music'))
+
+    voice.play(discord.FFmpegPCMAudio('Fanfare.mp3'))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 0.25
+
+
 # Pauses music
-@bot.command(pass_context=True, aliases=['pa', 'pau'])
+@bot.command(pass_context=True)
 @commands.has_any_role(c.EXCROLE['admin'], c.ROLES['🧙'])
 async def pause(ctx):
     voice = get(bot.voice_clients, guild=ctx.guild)
@@ -336,6 +361,20 @@ async def createCharacter(ctx, *args):
                            f'{allowed_classes} {author.mention}')
         else:
             await author.send(output)
+
+
+# Authors fo this creation
+@bot.command(pass_context=True)
+async def credits(ctx):
+    author = ctx.message.author
+    emb = discord.Embed(
+        title='~Авторы бота~',
+        colour=discord.Colour.from_rgb(114, 137, 218)
+    )
+
+    emb.add_field(name='VIMO Bots Division:'.format(c.PREFIX), value='Власов Даниил\n''Олянин Данила\n', inline=False)
+    
+    await ctx.send(author.mention, embed=emb)
 
 
 # And here magic begins)
